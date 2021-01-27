@@ -1,17 +1,23 @@
-const bodyParser = require('body-parser');
+const fs = require('fs');
 const express = require('express');
-const path = require('path');
-const db = require('./db/db.json')
-
-const app = express();
 const PORT = process.env.PORT || 8080;
-// Routes
-// =============================================================
-// Telling express to look to public folder for files
+const path = require('path');
+const db = require('./db/db.json');
+const app = express();
+
+let notes;
+
+// Parse Data
+// parse application/x-www-form-urlencoded
+app.use(express.urlencoded({ extended: false }));
+// parse application/json
+app.use(express.json());
+// Telling express to look to public folder to parse asset files
 app.use(express.static('public'));
 
-// Basic route that sends the user first to the AJAX Page
-// specifying routes to direct users to
+// Routes
+// =============================================================
+// GET request - sends the user first to the AJAX Page
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname + '/public/index.html'));
 });
@@ -20,23 +26,41 @@ app.get('/notes', function (req, res) {
     res.sendFile(path.join(__dirname + '/public/notes.html'));
   });
 
-// Displays notes
+// Displays parsed notes
 app.get('/api/notes', function(req, res) {
     return res.json(db);
   });
 
-// updates
+// POST Request - update notes
+
 app.post('/api/notes', function(req, res) {
-    return res.json(db);
-  });
 
-// parse application/x-www-form-urlencoded
-app.use(bodyParser.urlencoded({ extended: false }))
- 
-// parse application/json
-app.use(bodyParser.json());
+    fs.readFile('./db/db.json', function (err, data) {
+        if (err) throw err;
 
-// app listen setting port
+        notes = JSON.parse(data);
+        notes.push(req.body);
+
+        // create unique id for each new note
+        notes.forEach( function(item, i){
+            item.id = 1 + i;
+        });
+
+        //turning the object to a string and write it to the db file
+        fs.writeFile('./db/db.json', JSON.stringify(notes), function(err) {
+            if(err) throw err;
+        });
+    });
+    //send new note as response
+    res.json(req.body);
+});
+
+// DELETE Request - delete note
+app.delete('api.notes/:id', function(req,res) {
+  
+});
+
+// App Listener on set port
 app.listen(PORT, function(){
     console.log("App listening on PORT: " + PORT);
 });
