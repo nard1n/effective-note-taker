@@ -32,7 +32,6 @@ app.get('/api/notes', function(req, res) {
   });
 
 // POST Request - update notes
-
 app.post('/api/notes', function(req, res) {
 
 let newNote = req.body;

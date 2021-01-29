@@ -6,11 +6,11 @@
 Note Taker is the perfect solution for users who need to keep track of a lot of information. It's easy to forget or be unable to recall something important so this gives you the perfect place to jot it down  quickly and retrive it later!
 
 Screenshot of application:
-![Screenshot](./Assets/screenshot.png)
+![Screenshot](./Develop/Public/assets/note-taker.gif)
 
-Deployed app can be found [here] (...)
+Deployed app is deployed to Heroku, [here] (https://limitless-woodland-29832.herokuapp.com/)
 
-To watch a screencast of the running application, please click here: [Screencast](https://...)
+To watch a screencast of the running application, please click here: [Screencast](https://drive.google.com/file/d/1op4JBPfPNSz33RVrmPd5mdcY3G4p7vNr/view)
 
 This a simple note taker application. It can be used to write, save, and delete notes. The application uses an express backend then saves and retrieves note data from a JSON file.
 
